@@ -1,0 +1,52 @@
+<form [formGroup]="tradeForm" (ngSubmit)="onSubmit()">
+    <div class="d-flex">
+      <div class="flex-column">
+        <mat-form-field class="block-width">
+            <mat-label>Choose an entry date</mat-label>
+            <input matInput [matDatepicker]="entryDatePicker" formControlName="entry_date">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="entryDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #entryDatePicker></mat-datepicker>
+          <mat-error *ngIf="submitted && f['entry_date'].errors">
+            {{f['entry_date'].errors['required'] ? '' : '' }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="block-width">
+            <mat-label>Choose an exit date</mat-label>
+            <input matInput [matDatepicker]="exitDatePicker" formControlName="exit_date">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="exitDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #exitDatePicker></mat-datepicker>
+          <!-- <mat-error *ngIf="submitted && f.exit_date.errors">
+            {{f.exit_date.errors.required ? '' : ''}}
+          </mat-error> -->
+        </mat-form-field>
+
+        <mat-form-field class="block-width">
+          <mat-label>Fill entry price</mat-label>
+          <input type="number" matInput formControlName="entry_price"/>
+          <!-- <mat-error *ngIf="submitted && f.entry_price.errors">
+            {{f.phone.entry_price.required ? '' : ''}}
+          </mat-error> -->
+        </mat-form-field>
+
+        <mat-form-field class="block-width">
+          <mat-label>Fill exit price</mat-label>
+          <input type="number" matInput formControlName="exit_price"/>
+        </mat-form-field>
+
+        <div class="block-width">
+            <mat-label>Profit</mat-label>
+            <input type="number" matInput formControlName="profit" readonly/>
+        </div>
+      </div>
+
+      <mat-dialog-actions>
+        <button class="mat-raised-button" mat-dialog-close>Close</button>
+        <button class="mat-raised-button mat-primary"(click)="onSubmit()">Save</button>
+      </mat-dialog-actions>
+
+    </div>
+
+  </form>
