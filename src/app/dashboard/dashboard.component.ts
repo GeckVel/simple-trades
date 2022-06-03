@@ -1,5 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { StoreService } from '../services/store.service';
 import { TradeFormComponent } from '../trade-form/trade-form.component';
 
@@ -8,15 +9,16 @@ import { TradeFormComponent } from '../trade-form/trade-form.component';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   public data: TradeData[] = [];
   displayedColumns: string[] = ['Entry date', 'Exit date', 'Entry price', 'Exit price', 'Profit', 'Action'];
   dataSource: TradeData[] = [];
+  subs?: Subscription;
 
   constructor(public dialog: MatDialog, private storeService: StoreService) {}
 
   ngOnInit(): void {
-    this.storeService.getOrderList().subscribe((data: TradeData[] | null) => {
+    this.subs = this.storeService.getOrderList().subscribe((data: TradeData[] | null) => {
       if (data) {
         this.dataSource = data;
       }
@@ -25,6 +27,12 @@ export class DashboardComponent implements OnInit {
 
   openTradeForm(tradeData?: TradeData) {
     this.dialog.open(TradeFormComponent, {data: {...tradeData}})
+  }
+
+  ngOnDestroy(): void {
+    if (this.subs) {
+      this.subs.unsubscribe();
+    }
   }
 
 }

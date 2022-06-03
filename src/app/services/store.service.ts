@@ -6,7 +6,8 @@ import { TradeData } from '../dashboard/dashboard.component';
   providedIn: 'root'
 })
 export class StoreService {
-  private dataList$ = new BehaviorSubject<TradeData[]>([]);
+  private dataList$ = new BehaviorSubject<TradeData[]>([
+  ]);
   private orderList: TradeData[] = [];
 
   constructor() { }
@@ -21,7 +22,7 @@ export class StoreService {
   }
 
   getOrderList(): Observable<TradeData[] | null> {
-    return this.dataList$
+    return this.dataList$.asObservable()
   }
 
   updateList(order: TradeData): void {
@@ -32,6 +33,6 @@ export class StoreService {
 
   pushOrder(newOrder: TradeData): void {
     this.orderList.push(newOrder);
-    this.dataList$.next(this.orderList);
+    this.dataList$.next([...this.dataList$.getValue(), newOrder])
   }
 }

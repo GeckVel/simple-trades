@@ -25,7 +25,6 @@ import { ChartComponent } from './chart/chart.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
     }),

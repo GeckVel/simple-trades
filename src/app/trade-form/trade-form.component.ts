@@ -1,20 +1,22 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { v4 as uuid } from 'uuid';
 import { TradeData } from '../dashboard/dashboard.component';
 import { checkDates } from '../services/date.validator';
 import { StoreService } from '../services/store.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-trade-form',
   templateUrl: './trade-form.component.html',
   styleUrls: ['./trade-form.component.scss']
 })
-export class TradeFormComponent implements OnInit {
+export class TradeFormComponent implements OnInit, OnDestroy {
   tradeForm: FormGroup;
   submitted = false;
   tradeData: TradeData | undefined;
+  ngUnsubscribe = new Subject<void>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -32,7 +34,6 @@ export class TradeFormComponent implements OnInit {
       
 
       this.tradeData = data;
-      console.log(data)
   }
 
   ngOnInit(): void {
@@ -40,20 +41,23 @@ export class TradeFormComponent implements OnInit {
       this.tradeForm.patchValue(this.tradeData)
     }
 
-    this.tradeForm.get('entry_price')?.valueChanges.subscribe(value  => {
-      const profit = this.tradeForm.value.exit_price - value;
-      this.tradeForm.patchValue({profit})
-    })
+    this.tradeForm.get('entry_price')?.valueChanges
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(value  => {
+        const profit = this.tradeForm.value.exit_price - value;
+        this.tradeForm.patchValue({profit})
+      })
 
-    this.tradeForm.get('exit_price')?.valueChanges.subscribe(value  => {
-      const profit = value - this.tradeForm.value.entry_price;
-      this.tradeForm.patchValue({profit})
-    })
+    this.tradeForm.get('exit_price')?.valueChanges
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(value  => {
+        const profit = value - this.tradeForm.value.entry_price;
+        this.tradeForm.patchValue({profit})
+      })
   }
 
   onSubmit() {
     this.submitted = true;
-    console.log(this.tradeForm);
 
     if (this.tradeForm.invalid) {
       return;
@@ -62,7 +66,7 @@ export class TradeFormComponent implements OnInit {
     if (this.tradeForm.valid) {
       const order = this.tradeForm.value
       order.profit = order.exit_price - order.entry_price;
-      if (this.tradeData) {
+      if (this.tradeData?.id) {
         const updatedOrder = { ...this.tradeData, ...order}
         this.storeService.updateList(updatedOrder);
       } else {
@@ -77,6 +81,11 @@ export class TradeFormComponent implements OnInit {
 
   get f() {
     return this.tradeForm.controls;
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 }
