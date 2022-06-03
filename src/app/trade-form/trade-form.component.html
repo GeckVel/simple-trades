@@ -3,7 +3,7 @@
       <div class="flex-column">
         <mat-form-field class="block-width">
             <mat-label>Choose an entry date</mat-label>
-            <input matInput [matDatepicker]="entryDatePicker" formControlName="entry_date">
+            <input matInput [matDatepicker]="entryDatePicker" formControlName="entry_date" autocomplete="off">
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matSuffix [for]="entryDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #entryDatePicker></mat-datepicker>
@@ -14,7 +14,7 @@
 
         <mat-form-field class="block-width">
             <mat-label>Choose an exit date</mat-label>
-            <input matInput [matDatepicker]="exitDatePicker" formControlName="exit_date">
+            <input matInput [matDatepicker]="exitDatePicker" formControlName="exit_date" autocomplete="off">
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matSuffix [for]="exitDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #exitDatePicker></mat-datepicker>
@@ -25,15 +25,15 @@
 
         <mat-form-field class="block-width">
           <mat-label>Fill entry price</mat-label>
-          <input type="number" matInput formControlName="entry_price"/>
+          <input type="number" matInput formControlName="entry_price" autocomplete="off">
           <!-- <mat-error *ngIf="submitted && f.entry_price.errors">
-            {{f.phone.entry_price.required ? '' : ''}}
+            {{f.entry_price.errors.required ? '' : ''}}
           </mat-error> -->
         </mat-form-field>
 
         <mat-form-field class="block-width">
           <mat-label>Fill exit price</mat-label>
-          <input type="number" matInput formControlName="exit_price"/>
+          <input type="number" matInput formControlName="exit_price" autocomplete="off">
         </mat-form-field>
 
         <div class="block-width">
