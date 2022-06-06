@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { TradeData } from '../dashboard/dashboard.component';
+import { TradeData } from '../models/trade-data.interface';
 
 @Injectable({
   providedIn: 'root'

@@ -3,6 +3,7 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { StoreService } from '../services/store.service';
 import { TradeFormComponent } from '../trade-form/trade-form.component';
+import { TradeData } from '../models/trade-data.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -37,11 +38,3 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
 }
 
-export interface TradeData {
-  entry_date: Date;
-  exit_date: Date;
-  entry_price: number;
-  exit_price: number;
-  profit: number;
-  id: string;
-}

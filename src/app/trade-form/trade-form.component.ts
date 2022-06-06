@@ -2,10 +2,10 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { v4 as uuid } from 'uuid';
-import { TradeData } from '../dashboard/dashboard.component';
-import { checkDates } from '../services/date.validator';
 import { StoreService } from '../services/store.service';
 import { Subject, takeUntil } from 'rxjs';
+import { TradeData } from '../models/trade-data.interface';
+import { checkDates } from '../validators/date.validator';
 
 @Component({
   selector: 'app-trade-form',
@@ -31,7 +31,6 @@ export class TradeFormComponent implements OnInit, OnDestroy {
         exit_price: ['', [Validators.required, Validators.min(1)]],
         profit: ['', Validators.required],
       }, {validator: checkDates('entry_date', 'exit_date')});
-      
 
       this.tradeData = data;
   }
